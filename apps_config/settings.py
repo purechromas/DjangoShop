@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'categories.apps.CategoriesConfig',
+    'products.apps.ProductsConfig',
+    'blogs.apps.BlogsConfig',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +84,7 @@ WSGI_APPLICATION = 'apps_config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django_store',
+        'NAME': 'django_store3',
         'USER': 'postgres',
         'PASSWORD': os.getenv('PSQL_PASSWORD'),
         'HOST': 'localhost',
@@ -151,3 +153,6 @@ DEFAULT_FROM_EMAIL = 'purechromas@mail.ru'
 # Users app settings
 
 AUTH_USER_MODEL = 'users.User'
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

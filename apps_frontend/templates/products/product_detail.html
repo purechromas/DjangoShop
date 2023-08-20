@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+{% block content %}
+    <div class="container pt-1">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal"></h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <h1 class="card-title pricing-card-title">{{ product }}</h1>
+                        <ul class="list-unstyled mt-3 mb-4 text-start m-3 text-center">
+                            <li>{{ product.description }}</li>
+                            <img src="{{ product.image.url }}" alt="Not Loaded">
+                            <li>{{ product.purchase_price }} руб.</li>
+                        </ul>
+                        <a href="#"
+                            class="btn btn-sm btn-success">Buy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

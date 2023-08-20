@@ -13,17 +13,17 @@
     <div class="container-fluid d-flex align-items-center pt-3">
         <h6 class="mt-2">BlagoVestStore</h6>
         <a href="{% url 'categories:category_list' %}" class="ms-1 btn btn-sm btn-outline-primary">Categories</a>
-        <a href="#" class="ms-1 btn btn-sm btn-outline-primary">Blogs</a>
+        <a href="{% url 'blogs:blog_list' %}" class="ms-1 btn btn-sm btn-outline-primary">Blogs</a>
         <a href="#" class="ms-1 btn btn-sm btn-outline-primary">Contacts</a>
         <div class="ms-auto">
             {% if user.is_authenticated %}
                 <a href="{% url 'admin:index' %}" class="btn btn-sm btn-outline-info">Admin</a>
-                <a href="#" class="btn btn-sm btn-outline-primary">Logout</a>
-                <a href="#" class="btn btn-sm btn-outline-primary">Profile</a>
+                <a href="{% url 'users:logout' %}" class="btn btn-sm btn-outline-primary">Logout</a>
+                <a href="{% url 'users:profile' %}" class="btn btn-sm btn-outline-primary">Profile</a>
             {% else %}
-                <a href="#" class="btn btn-sm btn-outline-primary">Admin</a>
-                <a href="#" class="btn btn-sm btn-outline-success">Login</a>
-                <a href="#" class="btn btn-sm btn-outline-danger">Registration</a>
+                <a href="{% url 'admin:index' %}" class="btn btn-sm btn-outline-primary">Admin</a>
+                <a href="{% url 'users:login' %}" class="btn btn-sm btn-outline-success">Login</a>
+                <a href="{% url 'users:registration' %}" class="btn btn-sm btn-outline-danger">Registration</a>
             {% endif %}
         </div>
     </div>

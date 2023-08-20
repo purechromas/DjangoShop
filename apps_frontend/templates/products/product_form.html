@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+{% block content %}
+    <div class="container pt-2">
+        <form method="post" enctype="multipart/form-data" class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        {{ object.name }}
+                    </div>
+                    <div class="card-body">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="container d-flex justify-content-center">
+                            <button type="submit" class="btn btn-sm btn-success">
+                                {% if object %}
+                                    Update
+                                {% else %}
+                                    Save
+                                {% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if object %}
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            Product Version
+                        </div>
+                        <div class="card-body">
+                            {{ formset.management_form }}
+                            {% for form in formset.forms %}
+                                {{ form.as_p }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}
