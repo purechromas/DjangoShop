@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }}</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header>
+    <div class="container-fluid d-flex align-items-center pt-3">
+        <h6 class="mt-2">BlagoVestStore</h6>
+        <a href="{% url 'categories:category_list' %}" class="ms-1 btn btn-sm btn-outline-primary">Categories</a>
+        <a href="#" class="ms-1 btn btn-sm btn-outline-primary">Blogs</a>
+        <a href="#" class="ms-1 btn btn-sm btn-outline-primary">Contacts</a>
+        <div class="ms-auto">
+            {% if user.is_authenticated %}
+                <a href="{% url 'admin:index' %}" class="btn btn-sm btn-outline-info">Admin</a>
+                <a href="#" class="btn btn-sm btn-outline-primary">Logout</a>
+                <a href="#" class="btn btn-sm btn-outline-primary">Profile</a>
+            {% else %}
+                <a href="#" class="btn btn-sm btn-outline-primary">Admin</a>
+                <a href="#" class="btn btn-sm btn-outline-success">Login</a>
+                <a href="#" class="btn btn-sm btn-outline-danger">Registration</a>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="me-md-3 text-center">
+        <div class="p-1">
+            <h1 class="display-6">{% block title %} {% endblock title %}</h1>
+        </div>
+    </div>
+</header>
+<section>
+    {% block content %}
+    {% endblock content %}
+</section>
+<footer class="mt-auto">
+    <hr>
+    <div class="container text-center">
+        <h3 class="mt-1">BlagoVestStore</h3>
+        <p class="lead">Our job is to make your dreams real.</p>
+    </div>
+</footer>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

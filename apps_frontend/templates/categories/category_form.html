@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-success">Create a new category</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
