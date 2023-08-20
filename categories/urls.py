@@ -7,5 +7,5 @@ app_name = CategoriesConfig.name
 
 urlpatterns = [
     path('', CategoryListView.as_view(), name='category_list'),
-    path('catalog/create/', CategoryCreateView.as_view(), name='category_create'),
+    path('category/create/', CategoryCreateView.as_view(), name='category_create'),
 ]
