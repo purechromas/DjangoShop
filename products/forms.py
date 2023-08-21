@@ -3,11 +3,10 @@ from django import forms
 from products.models import Product, ProductVersion
 
 
-class ProductForm(forms.ModelForm):
+class ProductUserForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('name', 'description', 'image', 'purchase_price', 'category')
-
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control', 'placeholder': 'Write your name here...'
@@ -33,6 +32,17 @@ class ProductForm(forms.ModelForm):
             raise forms.ValidationError('This word is forbidden!')
 
         return cleaned_data
+
+
+class ProductModeratorForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('description', 'category', 'is_published')
+        widgets = {
+            'description': forms.Textarea(attrs={
+                'class': 'form-control', 'rows': 5, 'placeholder': 'Write a description...'
+            })
+        }
 
 
 class ProductVersionForm(forms.ModelForm):

@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'apps_config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django_store3',
+        'NAME': 'django_shop',
         'USER': 'postgres',
         'PASSWORD': os.getenv('PSQL_PASSWORD'),
         'HOST': 'localhost',
