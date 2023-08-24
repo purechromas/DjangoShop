@@ -16,7 +16,7 @@ class ProductListView(LoginRequiredMixin, ListView):
         category_id = self.kwargs.get('pk')
         user = self.request.user
 
-        if user.groups.filter(name='moderator').exists():
+        if user.is_staff or user.is_superuser:
             queryset = Product.objects.all()
         else:
             queryset = Product.objects.filter(category=category_id, user=user, is_published=True)
@@ -41,13 +41,14 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
 class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
     extra_context = {'title': 'Update product'}
-    permission_required = 'products.change_product'
+    permission_required = 'product.moderator'
+    form_class = ProductUserForm
 
-    def get_object(self, queryset=None):
-        self.object = super().get_object(queryset)
-        if self.object.user != self.request.user:
-            raise Http404
-        return self.object
+    def has_permission(self):
+        obj = self.get_object()
+        if self.request.user == obj.user or self.request.user.groups.filter(name='Moderators').exists():
+            return True
+        return super().has_permission()
 
     def get_success_url(self):
         return reverse('products:product_update', args=[self.kwargs.get('pk')])
@@ -74,12 +75,12 @@ class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
         return super().form_valid(form)
 
     def get_form_class(self):
-        if self.request.user.groups.filter(name='Users').exists():
+        if self.request.user == self.object.user:
             return ProductUserForm
-        elif self.request.user.groups.filter(name='moderator').exists():
+        elif self.request.user.groups.filter(name='Moderators').exists():
             return ProductModeratorForm
         else:
-            raise ValueError("No appropriate form found for this user")
+            raise Http404
 
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
@@ -90,3 +91,4 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     extra_context = {'title': 'Product'}
+
