@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.forms import inlineformset_factory
 from django.http import Http404
@@ -91,4 +92,3 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     extra_context = {'title': 'Product'}
-
