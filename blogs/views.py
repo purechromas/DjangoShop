@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
@@ -6,32 +7,32 @@ from blogs.forms import BlogForm
 from blogs.models import Blog
 
 
-class BlogListView(ListView):
+class BlogListView(LoginRequiredMixin, ListView):
     model = Blog
     extra_context = {'title': 'Blogs'}
 
 
-class BlogCreateView(CreateView):
+class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
     form_class = BlogForm
     extra_context = {'title': 'Create blog'}
     success_url = reverse_lazy('blogs:blog_list')
 
 
-class BlogUpdateView(UpdateView):
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Blog
     form_class = BlogForm
     extra_context = {'title': 'Update blog'}
     success_url = reverse_lazy('blogs:blog_list')
 
 
-class BlogDeleteView(DeleteView):
+class BlogDeleteView(LoginRequiredMixin, DeleteView):
     model = Blog
     extra_context = {'title': 'Delete blog'}
     success_url = reverse_lazy('blogs:blog_list')
 
 
-class BlogDetailView(DetailView):
+class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
     extra_context = {'title': 'Blog'}
 

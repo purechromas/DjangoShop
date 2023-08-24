@@ -1,25 +1,32 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.forms import inlineformset_factory
+from django.http import Http404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
-from products.forms import ProductForm, ProductVersionForm
+from products.forms import ProductVersionForm, ProductUserForm, ProductModeratorForm
 from products.models import Product, ProductVersion
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     extra_context = {'title': 'Products'}
 
     def get_queryset(self):
         category_id = self.kwargs.get('pk')
-        queryset = Product.objects.filter(category=category_id)
+        user = self.request.user
+
+        if user.is_staff or user.is_superuser:
+            queryset = Product.objects.all()
+        else:
+            queryset = Product.objects.filter(category=category_id, user=user, is_published=True)
         return queryset
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
-    form_class = ProductForm
+    form_class = ProductUserForm
     extra_context = {'title': 'Create product'}
 
     def get_success_url(self):
@@ -32,10 +39,17 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Product
-    form_class = ProductForm
     extra_context = {'title': 'Update product'}
+    permission_required = 'product.moderator'
+    form_class = ProductUserForm
+
+    def has_permission(self):
+        obj = self.get_object()
+        if self.request.user == obj.user or self.request.user.groups.filter(name='Moderators').exists():
+            return True
+        return super().has_permission()
 
     def get_success_url(self):
         return reverse('products:product_update', args=[self.kwargs.get('pk')])
@@ -61,12 +75,20 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
             formset.save()
         return super().form_valid(form)
 
+    def get_form_class(self):
+        if self.request.user == self.object.user:
+            return ProductUserForm
+        elif self.request.user.groups.filter(name='Moderators').exists():
+            return ProductModeratorForm
+        else:
+            raise Http404
+
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('categories:category_list')
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     extra_context = {'title': 'Product'}
