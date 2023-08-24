@@ -160,7 +160,7 @@ CACHE_ACTIVATE = True
 if CACHE_ACTIVATE:
     CACHES = {
         'default': {
-            "BACKEND": 'django.core.cache.backends.redis.RedisCache',
-            "LOCATION": 'redis://127.0.0.1:6379',
+            "BACKEND": os.getenv('CACHE_BACKEND'),
+            "LOCATION": os.getenv('CACHE_LOCATION'),
         }
     }
